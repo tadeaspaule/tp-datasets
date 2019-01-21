@@ -1,7 +1,7 @@
 import os, cv2, csv
 import numpy as np
 
-def __csv_to_2D_list(path):
+def _csv_to_2D_list(path):
     '''
     Helper method for reading one column from a CSV file
     Parameters
@@ -20,7 +20,7 @@ def __csv_to_2D_list(path):
         table[i] = temp
     return table
 
-def __csv_col_to_array(path,column,skip_first=True,to_lowercase=False):
+def _csv_col_to_array(path,column,skip_first=True,to_lowercase=False):
     '''
     Helper method for reading one column from a CSV file
     Parameters
@@ -39,7 +39,7 @@ def __csv_col_to_array(path,column,skip_first=True,to_lowercase=False):
     ----------
     List of entries in the specified column
     '''
-    table = __csv_to_2D_list(path)
+    table = _csv_to_2D_list(path)
     entries = []
     for _, row in enumerate(table):
         if to_lowercase and type(row[column]) is str:
@@ -51,7 +51,7 @@ def __csv_col_to_array(path,column,skip_first=True,to_lowercase=False):
     else:
         return entries
 
-def __get_abs_data_path(dir_name,file_name):
+def _get_abs_data_path(dir_name,file_name):
     '''
     Helper method for accessing various files in the 'Datasets' directory
     Parameters
@@ -89,11 +89,11 @@ class names:
         ----------
         List of first names
         '''
-        path = __get_abs_data_path(dir_name="unisex-names",file_name="unisex_names_table.csv")
-        names = __csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase)
+        path = _get_abs_data_path(dir_name="unisex-names",file_name="unisex_names_table.csv")
+        names = _csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase)
 
-        path = __get_abs_data_path(dir_name="most-common-name",file_name="new-top-firstNames.csv")
-        names += __csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase)
+        path = _get_abs_data_path(dir_name="most-common-name",file_name="new-top-firstNames.csv")
+        names += _csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase)
 
         return names
 
@@ -112,8 +112,8 @@ class countries_cities:
         ----------
         List of country names, sorted alphabetically
         '''
-        path = __get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
-        countries = set(__csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase))
+        path = _get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
+        countries = set(_csv_col_to_array(path,1,skip_first=True,to_lowercase=to_lowercase))
         return sorted(list(countries))
     
     @staticmethod
@@ -130,8 +130,8 @@ class countries_cities:
         List of city names
         '''
         cities = []
-        path = __get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
-        table = __csv_to_2D_list(path)
+        path = _get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
+        table = _csv_to_2D_list(path)
         for _, row in enumerate(table):
             if from_countries is None or row[1] in from_countries:
                 cities.append(row[0])
@@ -152,8 +152,8 @@ class countries_cities:
         List of subcountry names
         '''
         subcountries = []
-        path = __get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
-        table = __csv_to_2D_list(path)
+        path = _get_abs_data_path(dir_name="World_Cities",file_name="world-cities.csv")
+        table = _csv_to_2D_list(path)
         for _, row in enumerate(table):
             if from_countries is None or row[1] in from_countries:
                 subcountries.append(row[2])
@@ -237,3 +237,5 @@ class pokemon:
         return ["Normal","Fighting","Flying","Poison","Ground","Rock","Bug","Ghost","Steel",
          "Fire","Water","Grass","Electric","Psychic","Ice","Dragon","Dark","Fairy"]
 
+x,_,_ = pokemon.load_data()
+print(x.shape)
